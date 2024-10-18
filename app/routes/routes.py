@@ -13,4 +13,5 @@ def get_all_planets():
             description=planet.description,
             distance_from_earth=planet.distance_from_earth
         ))
+    return results_list
 
