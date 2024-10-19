@@ -8,12 +8,12 @@ planets_bp = Blueprint("planets_bp", __name__, url_prefix="/planets")
 def get_all_planets():
     result_planets = []
     for planet in planets:
-        print(dir(planet))
         result_planets.append(
             {
                 "id" : planet.id,
                 "name": planet.name,
-                "description" : planet.description
+                "description" : planet.description,
+                "distance_from_sun" : planet.distance_from_sun
             }
         )
     return result_planets
@@ -25,7 +25,8 @@ def get_one_planet(id):
             return {
             "id" : planet.id,
             "name" : planet.name,
-            "description" : planet.description
+            "description" : planet.description,
+            "distance_from_sun" : planet.distance_from_sun
             }
     return {
         "error" : f"The planet with id:{id} was not found"
