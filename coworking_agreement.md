@@ -1,4 +1,4 @@
-# Coworking Agreement
+.# Coworking Agreement
 
 Talk through each section with your partner. Add notes on what you discussed and agreed upon in each section. At the bottom, type your names to sign off on your agreement.
 

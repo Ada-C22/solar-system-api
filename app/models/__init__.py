@@ -5,7 +5,7 @@ class Planet:
         self.description = description
         self.moon = moon
         
-planet = [
+planets = [
     Planet(1, "Mercury", "the smallest planet in the solar system and orbits closest to the Sun, with extreme temperatures ranging from 430°C (800°F) during the day to -180°C (-290°F) at night.", 0),
     Planet(2, "Venus", "the Sun and has a thick, toxic atmosphere composed mostly of carbon dioxide, creating a runaway greenhouse effect that makes it the hottest planet in the solar system with surface temperatures around 465°C (870°F", 0),
     Planet(3, "Mars", "Red Planet due to its reddish appearance caused by iron oxide (rust) on its surface. It has a thin atmosphere composed mostly of carbon dioxide", 2 ),
