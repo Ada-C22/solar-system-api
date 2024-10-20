@@ -1,4 +1,4 @@
-from distutils.command.build_py import build_py
+# from distutils.command.build_py import build_py
 
 from flask import Flask
 from .routes.planet_routes import planets_bp
@@ -18,4 +18,5 @@ def main():
 
 
 if __name__ == "__main__":
+  
     main()
