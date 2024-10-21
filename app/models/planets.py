@@ -4,6 +4,14 @@ class Planet:
         self.name=name
         self.description=description
         self.distance_from_sun=distance_from_sun
+
+    def get_dict(self):
+        return {
+        "id": self.id,
+        "name": self.name,
+        "description": self.description,
+        "distance_from_sun": self.distance_from_sun
+    }
         
 planets = [
     Planet(1, "Mercury", "Smallest, closest to the Sun, extreme temperatures.", 57.9),

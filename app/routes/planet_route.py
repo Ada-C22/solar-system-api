@@ -1,6 +1,6 @@
-from flask import Blueprint
-from app.models.planets import planets
 from flask import Blueprint, abort, make_response
+from app.models.planets import planets
+
 
 planets_bp = Blueprint("planets_bp", __name__, url_prefix="/planets")
 
@@ -8,27 +8,21 @@ planets_bp = Blueprint("planets_bp", __name__, url_prefix="/planets")
 def get_all_planets():
     planets_list = []
     for planet in planets:
-        planets_list.append(
-            {
-                "id":planet.id,
-                "name":planet.name,
-                "description":planet.description  
-            }
-        )
+        planets_list.append(planet.get_dict())
+        #     {
+        #         "id":planet.id,
+        #         "name":planet.name,
+        #         "description":planet.description, 
+        #         "distance_from_sun": planet.distance_from_sun
+        #     }
+        # )
     return planets_list
 
 
 @planets_bp.get("/<planet_identifier>") # updated planet_id to planet_identifier to make more descriptive for both name and id
 def get_one_planet(planet_identifier):
     planet = validate_planet_identifier(planet_identifier)
-
-    return {
-        "id": planet.id,
-        "title": planet.name,
-        "description": planet.description,
-        "distance_from_sun": planet.distance_from_sun
-    }
-
+    return planet.get_dict(planet_identifier)
 
 def validate_planet_identifier(planet_identifier):
     # check if id is int or name. If id return id function if str return name function
