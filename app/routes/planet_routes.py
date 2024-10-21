@@ -11,15 +11,7 @@ def get_all_planet():
     result_list = []
 
     for planet in planets:
-        result_list.append(
-        {
-            "id":planet.id,
-            "name":planet.name,
-            "description":planet.description,
-            "moon":planet.moon
-
-        }
-        )
+        result_list.append(planet.__dict__)
     return result_list
 
 
@@ -31,19 +23,14 @@ def get_one_planet(planet_id):
 
     for planet in planets:
         if planet_id == planet_id:
-            return[{
-                "id": planet.id,
-                "name": planet.name,
-                "description": planet.description,
-                "moon": planet.moon
-            }]
+            return planet.__dict__
     return {"message": f"planet {planet_id} not found"}, 404
 
 def validate_planet(planet_id):
     try:
         planet_id = int(planet_id)
     except:
-        response = {"messsage": f"Planet {planet_id} invalid"}
+        response = {"message": f"Planet {planet_id} invalid"}
         abort(make_response(response,400))
     
     for planet in planets:
