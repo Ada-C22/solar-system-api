@@ -23,14 +23,14 @@ def validate_planet(id):
     try:
         input_id = int(id)
     except:
-        response = make_response(f"Planet id: {id} not found. Enter a valid planet number from 1 to 8.", 404)
-        abort(response)
+        abort(make_response(f"Planet id: '{id}' is invalid. Enter a valid planet number from 1 to 8.", 400))
+        
     
     for planet in planets:
         if planet.id == input_id:
             return planet
-    response = make_response(f"Planet id: {id} not found. Enter planet id from 1 to 8, 404")
-    abort(response)
+    abort(make_response(f"Planet id: '{id}' not found. Enter planet id from 1 to 8", 404))
+    
     
 
 @planets_bp.get("/<id>")
