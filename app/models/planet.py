@@ -5,6 +5,14 @@ class Planet:
         self. description = description
         self.distance_from_earth = distance_from_earth
 
+    def to_dict(self):
+        return dict(
+            id=self.id,
+            name=self.name,
+            description=self.description,
+            distance_from_earth=self.distance_from_earth
+        )
+
 planets = [
     Planet(1, "Mercury", "smallest, rocky", 216.3),
     Planet(2, "Venus", "hot, thick atmostphere", 259.71),
@@ -18,4 +26,3 @@ planets = [
 ]
 
 
-   
