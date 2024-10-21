@@ -22,6 +22,7 @@ def get_one_planet(planet_id):
     # planet_id = int(planet_id)
 
     for planet in planets:
+        # This is the bug Tami!, planet_id is always going to be planet id
         if planet_id == planet_id:
             return planet.__dict__
     return {"message": f"planet {planet_id} not found"}, 404
@@ -30,7 +31,7 @@ def validate_planet(planet_id):
     try:
         planet_id = int(planet_id)
     except:
-        response = {"message": f"Planet {planet_id} invalid"}
+        response = {"messsage": f"Planet {planet_id} invalid"}
         abort(make_response(response,400))
     
     for planet in planets:
