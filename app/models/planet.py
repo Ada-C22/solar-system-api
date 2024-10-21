@@ -4,6 +4,14 @@ class Planet:
         self.name = name
         self.description = description
         self.size = size_dia_km
+
+    def to_dict(self):
+        return dict(
+            id=self.id,
+            name=self.name,
+            desc=self.description,
+            size=self.size
+        )
     
 planets = [
     Planet(1,"some_planet", "rocky, no signs of life", 100),
