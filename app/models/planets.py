@@ -4,7 +4,7 @@ class Planet:
     def __init__(self, id, name, description, size):
         self.id = id
         self.name = name
-        self.desciption = description
+        self.description = description
         self.size = size
 
 
