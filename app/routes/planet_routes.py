@@ -18,25 +18,15 @@ def get_all_planet():
 @planets_bp.get("/<planet_id>")
 
 def get_one_planet(planet_id):
-    planet = validate_planet(planet_id)
-    # planet_id = int(planet_id)
-
-    for planet in planets:
-        # This is the bug Tami!, planet_id is always going to be planet id
-        if planet_id == planet_id:
-            return planet.__dict__
-    return {"message": f"planet {planet_id} not found"}, 404
-
-def validate_planet(planet_id):
     try:
         planet_id = int(planet_id)
     except:
-        response = {"messsage": f"Planet {planet_id} invalid"}
-        abort(make_response(response,400))
-    
+        response = {"message": f"Planet {planet_id} invalid"}
+        abort(make_response(response, 400))
+
     for planet in planets:
         if planet.id == planet_id:
-            return planet
-    
+            return planet.__dict__
+
     response = {"message": f"planet {planet_id} not found"}
     abort(make_response(response, 404))
