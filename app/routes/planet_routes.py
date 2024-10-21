@@ -17,8 +17,9 @@ def get_one_planet(planet_id):
     if not planet_id.isnumeric():
         response = {"message": f"Planet {planet_id} invalid"}
         abort(make_response(response, 400))
+
     for planet in planets:
-        if planet.id == planet_id:
+        if planet.id == int(planet_id):
             return planet.__dict__
 
     response = {"message": f"planet {planet_id} not found"}
