@@ -9,6 +9,16 @@ class Planet(db.Model):
     distance_from_sun: Mapped[int]
     namesake: Mapped[str]
 
+    def to_dict(self):
+        return dict(
+            id=self.id,
+            name=self.name,
+            surface_area=self.surface_area,
+            moons=self.moons,
+            distance_from_sun=self.distance_from_sun,
+            namesake=self.namesake
+        )
+
 # class Planet:
 #     def __init__(self, id, name, description, distance_from_earth):
 #         self.id = id
@@ -35,11 +45,3 @@ class Planet(db.Model):
 #     Planet(8, "Neptune", "farthest, ice giant", 4685.02),
 #     Planet(9, "Pluto", "very cold, five moons", 7523.53)
 # ]
-
-def to_dict(self):
-    return dict(
-        id=self.id,
-        name=self.name,
-        description=self.description,
-        distance_from_earth=self.distance_from_earth
-    )
