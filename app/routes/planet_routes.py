@@ -1,19 +1,19 @@
-from flask import Blueprint, abort, make_response
-from ..models.planet import planets
+from flask import Blueprint, abort, make_response, request
+from ..models.planet import Planet
 
 planets_bp = Blueprint("planets_bp", __name__, url_prefix="/planets")
 
-@planets_bp.get("")
-def get_all_planets():
-    results_list = []
-    for planet in planets:
-        results_list.append(planet.to_dict())
-    return results_list
+# @planets_bp.get("")
+# def get_all_planets():
+#     results_list = []
+#     for planet in planets:
+#         results_list.append(planet.to_dict())
+#     return results_list
 
-@planets_bp.get("/<planet_id>")
-def get_one_planet(planet_id):
-    planet = validate_planet(planet_id)
-    return planet.to_dict(), 200
+# @planets_bp.get("/<planet_id>")
+# def get_one_planet(planet_id):
+#     planet = validate_planet(planet_id)
+#     return planet.to_dict(), 200
 
 
 #Helper functions
