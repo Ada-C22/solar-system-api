@@ -18,3 +18,4 @@ As a client, I want to send a request...
 
 1. ...with new valid `planet` data and get a success response, so that I know the API saved the planet data
 1. ...to get all existing `planets`, so that I can see a list of planets, with their `id`, `name`, `description`, and other data of the `planet`.
+
