@@ -12,7 +12,7 @@ class Planet(db.Model):
         return dict(
             id=self.id,
             name=self.name,
-            descripction=self.description,
+            description=self.description,
             moon=self.moon
         )
 
