@@ -9,9 +9,9 @@ def create_planet():
     request_body = request.get_json()
     name = request_body["name"]
     color = request_body["color"]
-    personality = request_body["personality"]
+    description = request_body["description"]
 
-    new_planet = Planet(name=name, color=color, personality=personality)
+    new_planet = Planet(name=name, color=color, description=description)
     db.session.add(new_planet)
     db.session.commit()
     response = new_planet.to_dict()
