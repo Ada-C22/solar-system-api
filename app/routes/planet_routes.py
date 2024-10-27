@@ -18,7 +18,14 @@ def create_planet():
     return response, 201
 @planets_bp.get("")
 def get_all_planets():
+    description_param = request.args.get("description")
+    if description_param:
+        query =  db.select(Planet).where(Planet.description.like(f"%{description_param}%")).order_by(Planet.id)
+                
+    else:
+        query = db.select(Planet).order_by(Planet.id)
     query = db.select(Planet).order_by(Planet.id)
+    
     planets = db.session.scalars(query)
 
     planets_response = [planet.to_dict() for planet in planets]
