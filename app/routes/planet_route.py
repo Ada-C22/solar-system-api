@@ -1,6 +1,7 @@
 from flask import Blueprint, abort, make_response, request, Response
 from app.models.planets import Planet
 from ..db import db
+from sqlalchemy import func
 
 planets_bp = Blueprint("planets_bp", __name__, url_prefix="/planets")
 
@@ -30,7 +31,8 @@ def validate_planet_id(planet_id):
 
 # checks if user requested valid planet name and returns 404 if user enter unknown planet name
 def validate_planet_name(planet_name):
-    query = db.select(Planet).where(Planet.name == planet_name)
+    planet_name = planet_name.lower()
+    query = db.select(Planet).where(func.lower(Planet.name) == planet_name)
     planet = db.session.scalar(query)
 
     if not planet:
