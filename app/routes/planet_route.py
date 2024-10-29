@@ -1,4 +1,4 @@
-from flask import Blueprint, abort, make_response, request
+from flask import Blueprint, abort, make_response, request, Response
 from app.models.planets import Planet
 from ..db import db
 
@@ -28,38 +28,60 @@ def get_all_planets():
     planets_response = [planet.get_dict() for planet in planets]
     return planets_response
 
-# @planets_bp.get("/<planet_identifier>") # updated planet_id to planet_identifier to make more descriptive for both name and id
-# def get_one_planet(planet_identifier):
-#     planet = validate_planet_identifier(planet_identifier)
-#     return planet.get_dict(planet_identifier)
+@planets_bp.get("/<planet_identifier>") # updated planet_id to planet_identifier to make more descriptive for both name and id
+def get_one_planet(planet_identifier):
+    planet = validate_planet_identifier(planet_identifier)
+    return planet.get_dict()
 
-# def validate_planet_identifier(planet_identifier):
-#     # check if id is int or name. If id return id function if str return name function
-#     if planet_identifier.isdigit():
-#         return validate_planet_id(planet_identifier)
-#     else:
-#         return validate_planet_name(planet_identifier)
+def validate_planet_identifier(planet_identifier):
+    # check if id is int or name. If id return id function if str return name function
+    if planet_identifier.isdigit():
+        return validate_planet_id(planet_identifier)
+    else:
+        return validate_planet_name(planet_identifier)
 
-# # checks if user requested valid planet id and returns 404 if user enters unknown planet id
-# def validate_planet_id(planet_id):
-#     try:
-#         planet_id = int(planet_id) 
-#     except:
-#         response = {"message": f"planet {planet_id} invalid"}
-#         abort(make_response(response, 400))
+# checks if user requested valid planet id and returns 404 if user enters unknown planet id
+def validate_planet_id(planet_id):
+    try:
+        planet_id = int(planet_id) 
+    except:
+        response = {"message": f"planet {planet_id} invalid"}
+        abort(make_response(response, 400))
 
-#     for planet in planets:
-#         if planet.id == planet_id:
-#             return planet
+    query = db.select(Planet).where(Planet.id == planet_id)
+    planet = db.session.scalar(query)
 
-#     response = {"message": f"planet {planet_id} not found"}
-#     abort(make_response(response, 404))
-
-# # checks if user requested valid planet name and returns 404 if user enter unknown planet name
-# def validate_planet_name(planet_name):
-#     for planet in planets:
-#         if planet.name.lower() == planet_name.lower():
-#             return planet
+    if not planet:
+        abort(make_response({"message": f"planet {planet_id} not found"}, 404))
     
-#     response = {"message": f"planet {planet_name} not found"}
-#     abort(make_response(response), 404)
+    return planet
+
+# checks if user requested valid planet name and returns 404 if user enter unknown planet name
+def validate_planet_name(planet_name):
+    query = db.select(Planet).where(Planet.name == planet_name)
+    planet = db.session.scalar(query)
+
+    if not planet:
+        abort(make_response({"message": f"planet {planet_name} not found"}, 404))
+    
+    return planet
+
+@planets_bp.put("<planet_identifier")
+def update_planet(planet_identifier):
+    planet = validate_planet_identifier(planet_identifier)
+    request_body = request.get_json()
+
+    planet.name = request_body["name"]
+    planet.description = request_body["description"]
+    planet.distance_from_sum = request_body["distance_from_sun"]
+    db.session.commit()
+
+    return Response(status=204, mimetype='application/json')
+
+@planets_bp.delete("<planet_identifier")
+def delete_planet(planet_identifier):
+    planet = validate_planet_identifier(planet_identifier)
+    db.session.delete(planet)
+    db.session.commit()
+
+    return Response(status=204, mimetype='application/json')
