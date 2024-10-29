@@ -16,24 +16,39 @@ def create_planet():
     db.session.commit()
     response = new_planet.to_dict()
     return response, 201
+
 @planets_bp.get("")
 def get_all_planets():
     description_param = request.args.get("description")
     moon_param = request.args.get("moon")
+    sort_param = request.args.get("sort")
     
     query = db.select(Planet)   
     
+    # changed the desc param 
     if description_param:
-        query =  db.select(Planet).where(Planet.description.like(f"%{description_param}%")).order_by(Planet.id)
-    
+        query = query.where(Planet.description.like(f"%{description_param}%"))
     if moon_param:
-        query = query.where(Planet.moon == int(moon_param))
-    
-    query = query.order_by(Planet.id)     
-    # else:
-    #     query = db.select(Planet).order_by(Planet.id)
+        try:
+            moon_count = int(moon_param)
+            query = query.where(Planet.moon == moon_count)
+        except ValueError:
+            return {"message": "Invalid moon parameter"}, 400
         
-    planets = db.session.scalars(query)
+    #  Apply Sort
+    sort_options ={
+        "name": Planet.name,
+        "name_desc": Planet.name.desc(),
+        "moon": Planet.moon,
+        "moon_desc": Planet.moon.desc(),
+        "id": Planet.id
+    }    
+    
+    sort_field = sort_options.get(sort_param, Planet.id)
+    query = query.order_by(sort_field)
+    
+    #execute query   
+    planets = db.session.scalars(query).all()
     planets_response = [planet.to_dict() for planet in planets]
     return planets_response
 
