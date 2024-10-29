@@ -1,4 +1,4 @@
-from flask import Blueprint, abort, make_response, request
+from flask import Blueprint, abort, make_response, request, Response
 from ..models.planet import Planet
 from ..db import db
 
@@ -28,18 +28,35 @@ def get_all_planets():
     planets_response = [planet.to_dict() for planet in planets]
     return planets_response
 
-# @planets_bp.get("")
-# def get_all_planets():
-#     results_list = []
-#     for planet in planets:
-#         results_list.append(planet.to_dict())
-#     return results_list
+@planets_bp.get("/<planet_id>")
+def get_one_planet(planet_id):
+    planet = validate_planet(planet_id)
+    planet_response = planet.to_dict()
+    return planet_response
 
-# @planets_bp.get("/<planet_id>")
-# def get_one_planet(planet_id):
-#     planet = validate_planet(planet_id)
-#     return planet.to_dict(), 200
+@planets_bp.put("/<planet_id>")
+def update_one_planet(planet_id):
+    planet = validate_planet(planet_id)
+    response_body = request.get_json()
 
+    planet.name = response_body["name"]
+    planet.surface_area = response_body["surface_area"]
+    planet.moons = response_body["moons"]
+    planet.distance_from_sun = response_body["distance_from_sun"]
+    planet.namesake = response_body["namesake"]
+
+    db.session.commit()
+
+    return Response(status=204, mimetype="application/json")
+
+@planets_bp.delete("/<planet_id>")
+def delete_one_planet(planet_id):
+    planet = validate_planet(planet_id)
+
+    db.session.delete(planet)
+    db.session.commit()
+
+    return Response(status=204, mimetype="application/json")
 
 #Helper functions
 def validate_planet(planet_id):
@@ -48,8 +65,10 @@ def validate_planet(planet_id):
     except ValueError:
         abort(make_response({"message": f"Planet with {planet_id} is invalid"}, 400))
 
-    for planet in planets:
-        if planet.id == planet_id:
-            return planet
+    query = db.select(Planet).where(Planet.id == planet_id)
+    planet = db.session.scalar(query)
     
-    abort(make_response({"message": f"Planet with {planet_id} is not found"}, 404))
+    if not planet:
+        abort(make_response({"message": f"Planet with {planet_id} is not found"}, 404))
+    
+    return planet
