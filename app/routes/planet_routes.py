@@ -31,7 +31,7 @@ def get_all_planets():
     if moon_param:
         try:
             moon_count = int(moon_param)
-            query = query.where(Planet.moon == moon_count)
+            query = query.where(Planet.moon.__eq__(moon_count))
         except ValueError:
             return {"message": "Invalid moon parameter"}, 400
         
@@ -55,8 +55,6 @@ def get_all_planets():
 @planets_bp.get("/<planet_id>")
 def get_one_planet(planet_id):
     planet = validate_planet_one(planet_id)
-    # query = db.select(Planet).where(Planet.id == planet_id)
-    # planet = db.session.scalar(query)
 
 
     return {
