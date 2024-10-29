@@ -4,37 +4,9 @@ from ..db import db
 
 planets_bp = Blueprint("planets_bp", __name__, url_prefix="/planets")
 
-@planets_bp.post("")
-def create_planet():
-    request_body = request.get_json()
-    name = request_body["name"]
-    description = request_body["description"]
-    distance_from_sun = request_body["distance_from_sun"]
-
-
-    new_planet = Planet(name=name, description=description, distance_from_sun=distance_from_sun)
-    db.session.add(new_planet)
-    db.session.commit()
-
-    response = new_planet.get_dict()
-    return response, 201
-
-
-@planets_bp.get("")
-def get_all_planets():
-    query = db.select(Planet).order_by(Planet.id)
-    planets = db.session.scalars(query)
-
-    planets_response = [planet.get_dict() for planet in planets]
-    return planets_response
-
-@planets_bp.get("/<planet_identifier>") # updated planet_id to planet_identifier to make more descriptive for both name and id
-def get_one_planet(planet_identifier):
-    planet = validate_planet_identifier(planet_identifier)
-    return planet.get_dict()
-
+#Function gives end user ability to search api by ID or by Name
 def validate_planet_identifier(planet_identifier):
-    # check if id is int or name. If id return id function if str return name function
+    # Checks if id is int or name. If id return id function if str return name function
     if planet_identifier.isdigit():
         return validate_planet_id(planet_identifier)
     else:
@@ -66,6 +38,37 @@ def validate_planet_name(planet_name):
     
     return planet
 
+# Wave 4
+@planets_bp.post("")
+def create_planet():
+    request_body = request.get_json()
+    name = request_body["name"]
+    description = request_body["description"]
+    distance_from_sun = request_body["distance_from_sun"]
+
+
+    new_planet = Planet(name=name, description=description, distance_from_sun=distance_from_sun)
+    db.session.add(new_planet)
+    db.session.commit()
+
+    response = new_planet.get_dict()
+    return response, 201
+
+# Wave 2 and 3
+@planets_bp.get("")
+def get_all_planets():
+    query = db.select(Planet).order_by(Planet.id)
+    planets = db.session.scalars(query)
+
+    planets_response = [planet.get_dict() for planet in planets]
+    return planets_response
+
+@planets_bp.get("/<planet_identifier>") # updated planet_id to planet_identifier to make more descriptive for both name and id
+def get_one_planet(planet_identifier):
+    planet = validate_planet_identifier(planet_identifier)
+    return planet.get_dict()
+
+#Wave 4 
 @planets_bp.put("<planet_identifier>")
 def update_planet(planet_identifier):
     planet = validate_planet_identifier(planet_identifier)
