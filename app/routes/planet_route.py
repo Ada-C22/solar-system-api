@@ -66,19 +66,19 @@ def validate_planet_name(planet_name):
     
     return planet
 
-@planets_bp.put("<planet_identifier")
+@planets_bp.put("<planet_identifier>")
 def update_planet(planet_identifier):
     planet = validate_planet_identifier(planet_identifier)
     request_body = request.get_json()
 
     planet.name = request_body["name"]
     planet.description = request_body["description"]
-    planet.distance_from_sum = request_body["distance_from_sun"]
+    planet.distance_from_sun = request_body["distance_from_sun"]
     db.session.commit()
 
     return Response(status=204, mimetype='application/json')
 
-@planets_bp.delete("<planet_identifier")
+@planets_bp.delete("<planet_identifier>")
 def delete_planet(planet_identifier):
     planet = validate_planet_identifier(planet_identifier)
     db.session.delete(planet)
