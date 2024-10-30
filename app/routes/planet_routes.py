@@ -19,6 +19,7 @@ def create_planet():
 
 @planets_bp.get("")
 def get_all_planets():
+    # return make_response("I'm a teapot!", 200)
     description_param = request.args.get("description")
     moon_param = request.args.get("moon")
     sort_param = request.args.get("sort")
