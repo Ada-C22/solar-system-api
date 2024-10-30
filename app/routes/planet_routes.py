@@ -8,10 +8,10 @@ planets_bp = Blueprint("planets_bp", __name__, url_prefix="/planets")
 def create_planet():
     request_body = request.get_json()
     name = request_body["name"]
-    color = request_body["color"]
+    moon= request_body["moon"]
     description = request_body["description"]
 
-    new_planet = Planet(name=name, color=color, description=description)
+    new_planet = Planet(name=name, moon=moon, description=description)
     db.session.add(new_planet)
     db.session.commit()
     response = new_planet.to_dict()
@@ -59,7 +59,7 @@ def get_one_planet(planet_id):
 
 
     return {
-        "id": planet_id,
+        "id": planet.id,
         "name": planet.name,
         "description": planet.description,
         "moon": planet.moon
