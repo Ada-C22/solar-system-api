@@ -22,7 +22,18 @@ def create_planet():
 
 @planets_bp.get("")
 def get_all_planets():
-    query = db.select(Planet).order_by(Planet.id)
+    query = db.select(Planet)
+
+    namesake_param = request.args.get("namesake")
+    if namesake_param:
+        query = query.where(Planet.namesake.ilike(f"%{namesake_param}%"))
+
+    distance_from_sun_param = request.args.get("distance_from_sun")
+    if distance_from_sun_param:
+        query = query.where(Planet.distance_from_sun <= distance_from_sun_param).order_by("surface_area")
+
+    query = query.order_by(Planet.id)
+
     planets = db.session.scalars(query)
 
     planets_response = [planet.to_dict() for planet in planets]
