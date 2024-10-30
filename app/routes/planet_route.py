@@ -59,7 +59,22 @@ def create_planet():
 # Wave 2 and 3
 @planets_bp.get("")
 def get_all_planets():
-    query = db.select(Planet).order_by(Planet.id)
+    query = db.select(Planet)
+# Wave 5 - Created parameters to make filtering through Data easier
+    name_param = request.args.get("name")
+    if name_param:
+        query = query.where(Planet.name.ilike(f"%{name_param}%"))
+
+    description_param = request.args.get("description")
+    if description_param:
+        query = query.where(Planet.description.ilike(f"%{description_param}%"))
+    
+    distance_from_sun_param = request.args.get("distance_from_sun")
+    if distance_from_sun_param:
+        query = query.where(Planet.description.ilike(f"%{distance_from_sun_param}%"))
+
+    query = query.order_by(Planet.id)
+
     planets = db.session.scalars(query)
 
     planets_response = [planet.get_dict() for planet in planets]
