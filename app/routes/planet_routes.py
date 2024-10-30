@@ -1,6 +1,7 @@
 from flask import Blueprint, abort, make_response, request, Response
 from ..models.planet import Planet
 from ..db import db
+from sqlalchemy import asc, desc
 
 planets_bp = Blueprint("planets_bp", __name__, url_prefix="/planets")
 
@@ -22,7 +23,15 @@ def create_planet():
 
 @planets_bp.get("")
 def get_all_planets():
+    sort_param = request.args.get("sort")
+    order_param = request.args.get("order", "asc") # Default to ascending if not specified
+
     query = db.select(Planet)
+
+    if sort_param:
+        sort_column = getattr(Planet, sort_param, None)
+        if sort_column:
+            query = query.order_by(asc(sort_column) if order_param == "asc" else desc(sort_column))
 
     namesake_param = request.args.get("namesake")
     if namesake_param:
@@ -30,15 +39,14 @@ def get_all_planets():
 
     distance_from_sun_param = request.args.get("distance_from_sun")
     if distance_from_sun_param:
-        query = query.where(Planet.distance_from_sun <= distance_from_sun_param).order_by("surface_area")
-
+        query = query.where(Planet.distance_from_sun <= distance_from_sun_param)
     query = query.order_by(Planet.id)
 
     planets = db.session.scalars(query)
 
     planets_response = [planet.to_dict() for planet in planets]
     return planets_response
-
+    
 @planets_bp.get("/<planet_id>")
 def get_one_planet(planet_id):
     planet = validate_planet(planet_id)
