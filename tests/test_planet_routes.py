@@ -19,7 +19,7 @@ def test_get_single_planet(client, three_saved_planets):
         "id": 1,
         "name": "some_planet",
         "description": "rocky, no signs of life", 
-        "size": 100
+        "size_dia_km": 100
     }
     
 def test_get_single_planet_no_records(client):
@@ -37,19 +37,19 @@ def test_get_all_planets(client, three_saved_planets):
         "id": 1,
         "name": "some_planet",
         "description": "rocky, no signs of life", 
-        "size": 100
+        "size_dia_km": 100
     },
     {
         "id": 2,
         "name": "Earth",
         "description": "with lifeforms, water and land", 
-        "size": 5000
+        "size_dia_km": 5000
     },
     {
         "id": 3,
         "name": "Pluto",
         "description": "still a planet", 
-        "size": 200
+        "size_dia_km": 200
     },
     ]
 
@@ -58,7 +58,7 @@ def test_create_new_planet(client):
     response = client.post("/planets", json={
         "name": "Venus",
         "description": "closest to the Earth",
-        "size": 1244
+        "size_dia_km": 1244
     })
     response_body = response.get_json()
 
@@ -68,5 +68,5 @@ def test_create_new_planet(client):
         "id": 1,
         "name": "Venus",
         "description": "closest to the Earth",
-        "size": 1244
+        "size_dia_km": 1244
     }

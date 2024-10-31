@@ -10,9 +10,9 @@ def create_planet():
     request_body = request.get_json()
     name = request_body["name"]
     description= request_body["description"]
-    size = request_body["size"]
+    size_dia_km = request_body["size_dia_km"]
 
-    new_planet = Planet(name=name, description=description, size=size)
+    new_planet = Planet(name=name, description=description, size_dia_km=size_dia_km)
     db.session.add(new_planet)
     db.session.commit()
 
@@ -32,9 +32,9 @@ def get_all_planets():
     if description_param:
         query = query.where(Planet.description.ilike(f"%{description_param}%"))
 
-    size_param = request.args.get("size")
+    size_param = request.args.get("size_dia_km")
     if size_param:
-        query = query.where(Planet.size.ilike(f"%{size_param}%"))
+        query = query.where(Planet.size_dia_km.ilike(f"%{size_param}%"))
     
 
     query = query.order_by(Planet.id)
@@ -59,7 +59,7 @@ def update_planet(planet_id):
 
     planet.name = request_body["name"]
     planet.description = request_body["description"]
-    planet.size = request_body["size"]
+    planet.size_dia_km = request_body["size_dia_km"]
     
     db.session.commit()
 

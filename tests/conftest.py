@@ -35,9 +35,9 @@ def client(app):
 
 @pytest.fixture
 def three_saved_planets(app):
-    planet1 = Planet(name="some_planet", description="rocky, no signs of life", size=100)
-    planet2 = Planet(name="Earth", description="with lifeforms, water and land", size=5000)
-    planet3 = Planet(name="Pluto", description="still a planet", size=200)
+    planet1 = Planet(name="some_planet", description="rocky, no signs of life", size_dia_km=100)
+    planet2 = Planet(name="Earth", description="with lifeforms, water and land", size_dia_km=5000)
+    planet3 = Planet(name="Pluto", description="still a planet", size_dia_km=200)
 
     db.session.add_all([planet1, planet2, planet3])
     db.session.commit()
