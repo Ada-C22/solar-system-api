@@ -21,16 +21,28 @@ def create_planet():
 def get_all_planets():
     description_param = request.args.get("description")
     moon_param = request.args.get("moon")
+    moon_op_param = request.args.get("moon_param")
     sort_param = request.args.get("sort")
     
     query = db.select(Planet)   
 
     if description_param:
         query = query.where(Planet.description.like(f"%{description_param}%"))
+
     if moon_param:
         try:
             moon_count = int(moon_param)
-            query = query.where(Planet.moon.__eq__(moon_count))
+            # Dictionary of comparison operators
+            moon_operators = {
+                "eq": Planet.moon.__eq__,
+                "gt": Planet.moon.__gt__,
+                "lt": Planet.moon.__lt__,
+                "gte": Planet.moon.__ge__,
+                "lte": Planet.moon.__le__
+            }
+            operator_func = moon_operators.get(moon_op_param, Planet.moon.__eq__)
+            if operator_func:
+                query = query.where(operator_func(moon_count))
         except ValueError:
             return {"message": "Invalid moon parameter"}, 400
   

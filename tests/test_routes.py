@@ -51,7 +51,7 @@ def test_get_one_planet_success_200(client, two_saved_planets):
         "moon": 2
     }
 
-def test_create_new_planet_with_data_201(client, create_new_planet):
+def test_create_new_planet_with_data_201(client, add_new_planet):
     # Act
     response = client.post("/planets", json={
         "name": "Romulus",
@@ -83,7 +83,7 @@ def test_update_existing_planet_minus_one_moon(client, update_existing_planet):
     verify_body = verify_response.get_json()
     assert verify_body["moon"] == 6
     
-def test_delete_existing_planet(client,create_new_planet):
+def test_delete_existing_planet(client,add_new_planet):
     # Act
     response = client.delete("/planets/1")
     
