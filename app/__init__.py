@@ -14,6 +14,7 @@ def create_app(config=None):
     if config:
         app.config.update(config)
 
+
     db.init_app(app)
     migrate.init_app(app, db)
 
