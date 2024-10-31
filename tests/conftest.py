@@ -33,6 +33,35 @@ def client(app):
     return app.test_client()
 
 @pytest.fixture
+def get_every_single_planet(app):
+    planet = [Planet(name="Coruscant",
+                      description="City-covered planet that served as the seat of government for the Galactic Republic and Empire",
+                      moon=4),
+               Planet(name="Tatooine",
+                      description="Desert world with binary suns, home to the Skywalker family and Jabba the Hutt",
+                      moon=3), Planet(name="Naboo",
+                      description="Beautiful planet with rolling plains and vast seas, homeworld of Padmé Amidala",
+                      moon=1),
+               Planet(name="Hoth", description="Frozen ice planet that briefly served as a Rebel Alliance base",
+                      moon=2),
+
+               Planet(name="Endor",
+               description="Forest moon home to the Ewoks and site of the second Death Star's destruction",
+               moon=9)]
+    db.session.add_all(planet)
+    db.session.commit()
+
+
+
+
+
+
+@pytest.fixture
+def get_planet_invalid_id(app):
+    return "abc"
+
+
+@pytest.fixture
 def two_saved_planets(app):
     mercury = Planet(name = "Mecury", description = "the hotess next to the sun", moon = 0)
     vulcan = Planet(name = "Vulcan", description = "the best", moon = 2)
