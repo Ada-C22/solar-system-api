@@ -5,7 +5,7 @@ class Planet(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     name: Mapped[str]
     description: Mapped[str]
-    size: Mapped[str]
+    size: Mapped[int]
 
     def to_dict(self):
         return dict(
