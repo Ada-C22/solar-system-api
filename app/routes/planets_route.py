@@ -20,11 +20,35 @@ def create_planet():
 
 @planets_bp.get("")
 def get_all_planets():
-    query = db.select(Planet).order_by(Planet.id)
-    planets = db.session.scalars(query)
+    # query = db.select(Planet).order_by(Planet.id)
+    # planets = db.session.scalars(query)
 
-    planets_response = [planet.to_dict() for planet in planets]
-    return planets_response
+    # planets_response = [planet.to_dict() for planet in planets]
+    # return planets_response
+        query = db.select(Planet)
+        name_param = request.args.get("name")
+
+        if name_param:
+        # restrict to matching planet
+            query = query.where(Planet.name == name_param)
+    
+        description_param = request.args.get("description")
+        
+        if description_param:
+        # restrict to matching planet
+            query = query.where(Planet.description.ilike(f"%{description_param}%"))
+    
+        size_param = request.args.get("size")
+        if size_param:
+        # restrict to matching planet
+            query = query.where(Planet.ilike(f"%{size_param}%"))
+    
+        query = query.order_by(Planet.id)
+        planets = db.session.scalars(query)
+
+        planets_response = [planet.to_dict() for planet in planets]
+        return planets_response
+
 
 @planets_bp.get("/<planet_id>")
 def get_single_planet(planet_id):
