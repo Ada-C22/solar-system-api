@@ -21,7 +21,7 @@ def create_planet():
 @planets_bp.get("")
 def get_all_planets():
     query = db.select(Planet).order_by(Planet.id)
-    palnets = db.session.scalars(query)
+    planets = db.session.scalars(query)
 
     planets_response = [planet.to_dict() for planet in planets]
     return planets_response
@@ -32,9 +32,6 @@ def validate_planet(id):
     except ValueError:
         abort(make_response({"message": f"Planet id {id} invalid"}, 400))
 
-    for planet in Planet:
-        if planet.id == id:
-            return planet
     abort(make_response({"message": f"Planet id {id} not found"}, 404))
 
 
