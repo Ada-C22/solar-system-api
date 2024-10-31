@@ -19,14 +19,12 @@ def create_planet():
 
 @planets_bp.get("")
 def get_all_planets():
-    # return make_response("I'm a teapot!", 200)
     description_param = request.args.get("description")
     moon_param = request.args.get("moon")
     sort_param = request.args.get("sort")
     
     query = db.select(Planet)   
-    
-    # changed the desc param 
+
     if description_param:
         query = query.where(Planet.description.like(f"%{description_param}%"))
     if moon_param:
@@ -35,8 +33,7 @@ def get_all_planets():
             query = query.where(Planet.moon.__eq__(moon_count))
         except ValueError:
             return {"message": "Invalid moon parameter"}, 400
-        
-    #  Apply Sort
+  
     sort_options ={
         "name": Planet.name,
         "name_desc": Planet.name.desc(),
@@ -47,8 +44,7 @@ def get_all_planets():
     
     sort_field = sort_options.get(sort_param, Planet.id)
     query = query.order_by(sort_field)
-    
-    #execute query   
+      
     planets = db.session.scalars(query).all()
     planets_response = [planet.to_dict() for planet in planets]
     return planets_response
@@ -56,7 +52,6 @@ def get_all_planets():
 @planets_bp.get("/<planet_id>")
 def get_one_planet(planet_id):
     planet = validate_planet_one(planet_id)
-
 
     return {
         "id": planet.id,
@@ -76,7 +71,7 @@ def update_planet(planet_id):
     planet.moon= request_body["moon"]
     db.session.commit()
 
-    return Response(status=204, mimetype="application/json")
+    return Response(status=204, mimetype="application/json") 
 
 @planets_bp.delete("/<planet_id>")
 def delete_planet(planet_id):
@@ -84,8 +79,7 @@ def delete_planet(planet_id):
     db.session.delete(planet)
     db.session.commit()
     
-    return Response(status=204, mimetype="application/json")
-
+    return Response(status=204, mimetype="application/json") 
 
 def validate_planet(planet_id, planets):
     # Narrow the errors - data error, type error

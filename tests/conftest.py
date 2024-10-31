@@ -27,7 +27,6 @@ def app():
     with app.app_context():
         db.drop_all()
 
-
 @pytest.fixture
 def client(app):
     return app.test_client()
@@ -51,15 +50,9 @@ def get_every_single_planet(app):
     db.session.add_all(planet)
     db.session.commit()
 
-
-
-
-
-
 @pytest.fixture
 def get_planet_invalid_id(app):
     return "abc"
-
 
 @pytest.fixture
 def two_saved_planets(app):
@@ -73,3 +66,16 @@ def create_new_planet(app):
     romulus =  Planet(name = "Romulus", description = "Homeworld of the Romulan Star Empire, featuring green-tinted skies and advanced architecture.", moon = 2)
     db.session.add(romulus)
     db.session.commit()
+    
+@pytest.fixture
+def update_existing_planet(app):
+    kronos= Planet(name ="Kronos", description = "Homeword of the Klingon Empire, rich in warrior culture and tradition, featuring magnificent cities built among dramatic mountain ranges, home to the legendary Great Hall of the High Council, and birthplace of many of the quadrant's greatest warriors and most honored traditions", moon = 7)
+    db.session.add(kronos)
+    db.session.commit()
+
+@pytest.fixture
+def delete_existing_planet_romulus(app):
+    romulus =  Planet(name = "Romulus", description = "Homeworld of the Romulan Star Empire, featuring green-tinted skies and advanced architecture.", moon = 2)
+    db.session.add(romulus)
+    db.session.commit()
+    
