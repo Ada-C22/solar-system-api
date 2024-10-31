@@ -83,7 +83,7 @@ def test_update_existing_planet_minus_one_moon(client, update_existing_planet):
     verify_body = verify_response.get_json()
     assert verify_body["moon"] == 6
     
-def test_delete_existing_planet(client,delete_existing_planet_romulus):
+def test_delete_existing_planet(client,create_new_planet):
     # Act
     response = client.delete("/planets/1")
     

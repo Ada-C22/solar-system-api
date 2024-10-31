@@ -73,9 +73,9 @@ def update_existing_planet(app):
     db.session.add(kronos)
     db.session.commit()
 
-@pytest.fixture
-def delete_existing_planet_romulus(app):
-    romulus =  Planet(name = "Romulus", description = "Homeworld of the Romulan Star Empire, featuring green-tinted skies and advanced architecture.", moon = 2)
-    db.session.add(romulus)
-    db.session.commit()
+# @pytest.fixture
+# def delete_existing_planet_romulus(app):
+#     romulus =  Planet(name = "Romulus", description = "Homeworld of the Romulan Star Empire, featuring green-tinted skies and advanced architecture.", moon = 2)
+#     db.session.add(romulus)
+#     db.session.commit()
     
