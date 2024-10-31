@@ -3,7 +3,7 @@ from app.models.planet import Planet
 from ..db import db
 
 # created blueprint
-planets_bp = Blueprint("planets_bp",__name__, url_prefix=("/planets"))
+planets_bp = Blueprint("planets_bp", __name__, url_prefix="/planets")
 
 @planets_bp.post("")
 def create_planet():
@@ -38,7 +38,6 @@ def get_all_planets():
     
 
     query = query.order_by(Planet.id)
-    
     planets = db.session.scalars(query)
 
     planets_response = [planet.to_dict() for planet in planets]
@@ -77,6 +76,7 @@ def delete_planet(planet_id):
 def validate_planet(planet_id):
     try:
         planet_id = int(planet_id)
+
     except ValueError:
         abort(make_response({"message": f"planet {planet_id} is an invalid ID"}, 400))
     
