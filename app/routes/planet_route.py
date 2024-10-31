@@ -60,6 +60,7 @@ def create_planet():
 @planets_bp.get("")
 def get_all_planets():
     query = db.select(Planet)
+    
 # Wave 5 - Created parameters to make filtering through Data easier
     name_param = request.args.get("name")
     if name_param:
