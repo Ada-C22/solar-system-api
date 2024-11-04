@@ -9,13 +9,14 @@ planets_bp = Blueprint("planets_bp", __name__, url_prefix="/planets")
 @planets_bp.post("")
 def create_planet():
     request_body = request.get_json()
-    name = request_body["name"]
-    surface_area = request_body["surface_area"]
-    moons = request_body["moons"]
-    distance_from_sun = request_body["distance_from_sun"]
-    namesake = request_body["namesake"]
-
-    new_planet = Planet(name=name, surface_area=surface_area, moons=moons, distance_from_sun=distance_from_sun, namesake=namesake)
+    
+    try:
+        new_planet = Planet.from_dict(request_body)
+    except KeyError as e:
+        response = {
+            "message": f"Invalid request: missing {e.args[0]}"
+        }
+        abort(make_response(response, 400))
     db.session.add(new_planet)
     db.session.commit()
 
@@ -50,13 +51,13 @@ def get_all_planets():
     
 @planets_bp.get("/<planet_id>")
 def get_one_planet(planet_id):
-    planet = validate_model(Planet.planet_id)
+    planet = validate_model(Planet, planet_id)
     planet_response = planet.to_dict()
     return planet_response
 
 @planets_bp.put("/<planet_id>")
 def update_one_planet(planet_id):
-    planet = validate_model(Planet.planet_id)
+    planet = validate_model(Planet, planet_id)
     response_body = request.get_json()
 
     planet.name = response_body["name"]
@@ -71,24 +72,9 @@ def update_one_planet(planet_id):
 
 @planets_bp.delete("/<planet_id>")
 def delete_one_planet(planet_id):
-    planet = validate_model(Planet.planet_id)
+    planet = validate_model(Planet, planet_id)
 
     db.session.delete(planet)
     db.session.commit()
 
     return Response(status=204, mimetype="application/json")
-
-#Helper functions
-def validate_model(cls, model_id):
-    try:
-        model_id = int(model_id)
-    except ValueError:
-        abort(make_response({"message": f"{cls.__name__} with {model_id} is invalid"}, 400))
-
-    query = db.select({cls.__name__}).where({cls.__name__}.id == model_id)
-    model = db.session.scalar(query)
-    
-    if not model:
-        abort(make_response({"message": f"{cls.__name__} with {model_id} is not found"}, 404))
-    
-    return model
