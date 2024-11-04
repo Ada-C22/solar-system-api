@@ -19,3 +19,12 @@ class Planet(db.Model):
             namesake=self.namesake
         )
 
+    @classmethod
+    def from_dict(cls, planet_data):
+        return cls(
+            name=planet_data["name"],
+            surface_area=planet_data["surface_area"],
+            moons=planet_data["moons"],
+            distance_from_sun=planet_data["distance_from_sun"],
+            namesake=planet_data["namesake"]
+        )
