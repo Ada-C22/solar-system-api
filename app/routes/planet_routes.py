@@ -6,8 +6,20 @@ planet_bp = Blueprint("planet_bp", __name__, url_prefix="/planets")
 
 @planet_bp.get("")
 def get_all_planets():
-  query = db.select(Planet).order_by(Planet.id)
-  planets = db.session.scalars(query)
+  query = db.select(Planet)
+
+  description_param = request.args.get("description")
+  smallest_diameter_param = request.args.get("smallest_diameter")
+  largest_diameter_param = request.args.get("largest_diameter")
+
+  if description_param:
+    query = query.where(Planet.description.ilike(f"%{description_param}%"))
+  if smallest_diameter_param:
+    query = query.where(Planet.diameter < largest_diameter_param)
+  if largest_diameter_param:
+    query = query.where(Planet.diameter > smallest_diameter_param)
+
+  planets = db.session.scalars(query.order_by(Planet.id))
 
   planet_response = []
   for planet in planets:
